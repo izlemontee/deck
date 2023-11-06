@@ -1,24 +1,35 @@
+package sdf;
+
 public class card {
-
     private String suit;
-    private String value;
+    private String name;
+    private String CardName;
+    private int value;
 
-    public card(String suit, String value){
+    public card(String suit,String name, int value){ //constructor for a new card, taking in the suit, name, and value
         this.suit = suit;
+        this.name = name;
         this.value = value;
+        this.CardName = name + " " + suit;
     }
 
-    public String getSuit(){
+    public card(String name){
+        this.name = name;
+        this.CardName = name;
+    }
+
+    public String getSuit(){ //gets the suit name
         return suit;
     }
-    public void setSuit(String suit){
-        this.suit = suit; //remember the this keyword applies to the ARG taken in, not the instance variable on top
+
+    public String getName(){ //gets the name
+        return name;
     }
-    public String getValue(){
+    public int getValue(){ //gets the value
         return value;
     }
-    public void setValue(String value){
-        this.value = value;
+    public String getCardName(){ //gets the card name
+        return CardName;
     }
-    
+
 }

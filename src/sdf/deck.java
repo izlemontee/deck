@@ -1,133 +1,115 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.io.Console;
+package sdf;
+
 import java.util.*;
+import java.io.Console;
 
-public class deck{
-//model a deck
-//be able to draw a card
-//shuffle the deck
-//create a new deck
+public class deck {
+    private static final String[] suits = {"Spades","Diamonds","Hearts","Clubs"};
+    private static final String[] names = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+    private static final int[] values = {1,2,3,4,5,6,7,8,9,10,10,10,10};
+    //public boolean hasJoker = false;
+    private List<card> deckList;
+    private List<String> cardNames;
 
-    final static String[] values = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
-    final static String[] suits = {"Spade","Diamond","Heart","Club"};
-    final static String[] jokers = {"Joker","Joker"};
-    //constructor
-    public deck(){
-        List<String> deckList = new ArrayList<String> ();
-        for (String suit:suits){
-            for (String value:values){
-                String cardName = value + " " + suit;
-                //card cardName = new card(suit,value);
-                deckList.add(cardName);
+
+
+    public deck(){ //deck CONSTRUCTOR, where it makes a new deck
+        deckList = new LinkedList<>();
+        cardNames = new LinkedList<>();
+        for (String s:suits){
+            for (int i = 0;i<names.length;i++){
+                card c = new card(s,names[i],values[i]);
+                deckList.add(c);
             }
         }
-        System.out.println(deckList);
+        for(card c:deckList){
+            String cardName = c.getCardName();
+            cardNames.add(cardName);
+        }
+        System.out.println("card list built.");
+        /*
+        if(hasJoker == true){ //add in joker (optional)
+            card c = new card("Joker");
+            deckList.add(c);
+            deckList.add(c);
+        }
+        */
+    }
+
+    public card draw(){ //draws a CARD OBJECT from the deckList, which is a linkedlist
+        if(deckList.size()>0){
+            card c = deckList.get(0);
+            deckList.remove(0);
+            cardNames.remove(0);
+            return c;
+        }
+
+        else{
+            System.out.println("Deck is empty.");
+            card c = null;
+            return c;
+        }
 
     }
 
-    public static void main(String args[]){
-        //deck deck1 = new deck();
-        List<String> deck = new ArrayList<>();
+    public List<card> shuffle(List<card> deckList){
+        if(deckList.size()>0){
+            Collections.shuffle(deckList);
+            System.out.println(" Deck shuffled.");
+            cardNames.clear();
+            for(card c:deckList){
+                String cardName = c.getCardName();
+                cardNames.add(cardName);
+            }
+        }
+        else{
+            System.out.println("There is no deck. Create a new one.");
+        }
+
+
+
+        return deckList;
+    }
+
+    public deck newDeck(){
+        boolean hasJoker = false;//give the user an option if they want a joker
+        boolean hasError = true;
         Console cons = System.console();
-        boolean stop = false;
-        System.out.println("Welcome to your deck generator");
-        System.out.println("Type 'help' for list of functions");
-        while(!stop){
-            String input = cons.readLine(">");
-            Scanner inputScanner = new Scanner(input);
-            String cmd = inputScanner.next();
+        /*
+        while(hasError){
+            String input = cons.readLine(">>>Include joker? (Y/N)");
+            Scanner s = new Scanner(input);
+            String cmd = s.next();
+            cmd = cmd.toUpperCase();
             switch(cmd){
-                case "stop":
-                stop = true;
+                case "Y":
+                hasJoker = true;
+                hasError = false;
                 break;
 
-                case "draw":
-                draw(deck);
-                break;
-
-                case "shuffle":
-                shuffle(deck);
-                break;
-
-                case "new":
-                deck = newDeck(suits,values,inputScanner);
-                break;
-
-                case "deck":
-                showDeck(deck);
-                break;
-
-                case "help":
-                help();
+                case "N":
+                hasJoker = false;
+                hasError = false;
                 break;
 
                 default:
-                System.out.println("Invalid command.");
+                System.out.println("Invalid option.");
             }
-            inputScanner.close();
-
+            s.close();
         }
-        System.out.println("bye");
-    }
-    static void draw(List<String> deck){
-        if(deck.size()>0){
-            System.out.println(deck.get(0));
-            deck.remove(0);
-        }
-        else{
-            System.out.println("There is no deck. Create a new one.");
-        }
-        //return deck;
-
-    }
-    static void shuffle(List<String> deck){
-        if(deck.size()>0){
-            Collections.shuffle(deck);
-            System.out.println(" Deck shuffled.");
-        }
-        else{
-            System.out.println("There is no deck. Create a new one.");
-        }
-        //return deck;
-
-    }
-
-    static List<String> newDeck(String[] suits, String[] values,Scanner inputScanner){
-        List<String> deckList = new ArrayList<String> ();
-        for (String suit:suits){
-        for (String value:values){
-            String cardName = value + " " + suit;
-                //card cardName = new card(suit,value);
-                deckList.add(cardName);
-            }
-        }
-        if(inputScanner.hasNext()){
-            if(inputScanner.next()=="joker"){
-                deckList.add("Joker");
-                deckList.add("Joker");
-            }
-            else{
-                System.out.println("Invalid card. Default deck created.");
-            }
-        }
-
+        */
+      
+        deck d = new deck(); //takes in arg on whether it has a joker
         System.out.println("New deck created.");
+        return d;
+    }
+    public List<card> getDeck(){
         return deckList;
-
-
     }
-
-    static void showDeck(List<String> deck){
-        System.out.println(deck);
+    public List<String> getCardNames(){
+        return cardNames;
     }
-
-    static void help(){
-        System.out.println("new: creates a new deck");
-        System.out.println("draw: draws a card and discards");
-        System.out.println("shuffle: shuffles the deck");
-        System.out.println("deck: shows the cards in the deck");
-
+    public void showCards(){
+        System.out.println(cardNames);
     }
 }
